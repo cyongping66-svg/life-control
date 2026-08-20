@@ -1,0 +1,248 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String          @id @default(uuid()) @db.Uuid
+  wechatOpenId    String?         @unique @map("wechat_open_id")
+  displayName     String?         @map("display_name")
+  role            UserRole        @default(USER)
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+  questions       Question[]
+  financeItems    FinanceItem[]
+  careerItems     CareerItem[]
+  contacts        Contact[]
+  reminders       Reminder[]
+  resumeFiles     ResumeFile[]
+  contentReports  ContentReport[]
+  auditLogs       AuditLog[]
+
+  @@map("users")
+}
+
+model Question {
+  id          String            @id @default(uuid()) @db.Uuid
+  userId      String            @map("user_id") @db.Uuid
+  text        String
+  answer      String
+  category    LifeCategory
+  disclaimer String?
+  createdAt   DateTime          @default(now()) @map("created_at")
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sources     QuestionSource[]
+
+  @@index([userId, createdAt])
+  @@map("questions")
+}
+
+model ExternalContent {
+  id               String            @id @default(uuid()) @db.Uuid
+  platform         ContentPlatform
+  title            String
+  summary          String
+  author           String?
+  url              String            @unique
+  publishedAt      DateTime?         @map("published_at")
+  verifiedAt       DateTime           @default(now()) @map("verified_at")
+  interactionCount Int?               @map("interaction_count")
+  tags             String[]
+  status            ContentStatus     @default(ACTIVE)
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+  questions         QuestionSource[]
+  reports           ContentReport[]
+
+  @@index([status, verifiedAt])
+  @@map("external_contents")
+}
+
+model QuestionSource {
+  questionId String          @map("question_id") @db.Uuid
+  contentId  String          @map("content_id") @db.Uuid
+  rank       Int
+  question   Question        @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  content    ExternalContent @relation(fields: [contentId], references: [id], onDelete: Restrict)
+
+  @@id([questionId, contentId])
+  @@map("question_sources")
+}
+
+model FinanceItem {
+  id           String      @id @default(uuid()) @db.Uuid
+  userId       String      @map("user_id") @db.Uuid
+  kind         FinanceKind
+  institution  String
+  alias        String?
+  lastFour     String?     @map("last_four") @db.VarChar(4)
+  billingDay   Int?        @map("billing_day")
+  repaymentDay Int?        @map("repayment_day")
+  note         String?
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, kind])
+  @@map("finance_items")
+}
+
+model CareerItem {
+  id         String       @id @default(uuid()) @db.Uuid
+  userId     String       @map("user_id") @db.Uuid
+  kind       CareerKind
+  title      String
+  status     ProgressStatus @default(PLANNED)
+  targetDate DateTime?    @map("target_date")
+  note       String?
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, kind])
+  @@map("career_items")
+}
+
+model ResumeFile {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  name      String
+  objectKey String   @map("object_key")
+  mimeType  String   @map("mime_type")
+  size      Int
+  version   Int
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, name, version])
+  @@map("resume_files")
+}
+
+model Contact {
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String   @map("user_id") @db.Uuid
+  name          String
+  className     String?  @map("class_name")
+  encryptedPhone String? @map("encrypted_phone")
+  birthday      String?  @db.VarChar(5)
+  photoKey      String?  @map("photo_key")
+  note          String?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, name])
+  @@map("contacts")
+}
+
+model Reminder {
+  id        String         @id @default(uuid()) @db.Uuid
+  userId    String         @map("user_id") @db.Uuid
+  title     String
+  remindAt  DateTime       @map("remind_at")
+  channel   ReminderChannel @default(IN_APP)
+  status    ReminderStatus @default(PENDING)
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status, remindAt])
+  @@map("reminders")
+}
+
+model ContentReport {
+  id        String          @id @default(uuid()) @db.Uuid
+  userId    String          @map("user_id") @db.Uuid
+  contentId String          @map("content_id") @db.Uuid
+  reason    String
+  status    ReportStatus    @default(OPEN)
+  createdAt DateTime        @default(now()) @map("created_at")
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   ExternalContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@index([status, createdAt])
+  @@map("content_reports")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String?  @map("user_id") @db.Uuid
+  action    String
+  resource  String
+  resourceId String? @map("resource_id")
+  requestId String   @map("request_id")
+  metadata  Json?
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@map("audit_logs")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum LifeCategory {
+  FINANCE
+  CAREER
+  SOCIAL
+  GENERAL
+}
+
+enum ContentPlatform {
+  OFFICIAL
+  BILIBILI
+  DOUYIN
+  XIAOHONGSHU
+  OTHER
+}
+
+enum ContentStatus {
+  ACTIVE
+  HIDDEN
+  STALE
+}
+
+enum FinanceKind {
+  BANK_CARD
+  PAYMENT_ACCOUNT
+  LOAN
+  CREDIT
+}
+
+enum CareerKind {
+  GOAL
+  RESUME
+  SIDE_PROJECT
+}
+
+enum ProgressStatus {
+  PLANNED
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+enum ReminderChannel {
+  IN_APP
+  WECHAT
+}
+
+enum ReminderStatus {
+  PENDING
+  SENT
+  CANCELLED
+  FAILED
+}
+
+enum ReportStatus {
+  OPEN
+  RESOLVED
+  REJECTED
+}

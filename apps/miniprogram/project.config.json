@@ -1,0 +1,13 @@
+{
+  "miniprogramRoot": "dist/",
+  "projectname": "life-control",
+  "description": "人生浪费指南微信小程序",
+  "appid": "touristappid",
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": true,
+    "minified": true
+  },
+  "compileType": "miniprogram"
+}

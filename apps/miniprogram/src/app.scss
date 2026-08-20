@@ -1,0 +1,94 @@
+page {
+  background: #f4f3ec;
+  color: #17211b;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+}
+
+.page {
+  padding: 32px;
+}
+.hero {
+  padding: 48px 0 28px;
+}
+.eyebrow {
+  color: #5f7569;
+  font-size: 24px;
+  letter-spacing: 4px;
+}
+.title {
+  font-size: 56px;
+  line-height: 1.15;
+  font-weight: 700;
+  margin: 12px 0;
+}
+.subtitle {
+  color: #5f675f;
+  line-height: 1.7;
+}
+.card {
+  background: white;
+  border: 1px solid #dde1dc;
+  border-radius: 24px;
+  padding: 28px;
+  margin-bottom: 20px;
+}
+.card-title {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.muted {
+  color: #708078;
+  font-size: 24px;
+}
+.button {
+  background: #155d42;
+  color: white;
+  border-radius: 999px;
+  font-size: 28px;
+  line-height: 2.8;
+  margin: 20px 0;
+}
+.button::after {
+  border: 0;
+}
+.button.secondary {
+  background: #e4ebe6;
+  color: #155d42;
+}
+.input,
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: white;
+  border: 1px solid #ced7d1;
+  border-radius: 18px;
+  padding: 22px;
+  margin: 10px 0;
+}
+.textarea {
+  min-height: 180px;
+}
+.row {
+  display: flex;
+  gap: 16px;
+}
+.row > * {
+  flex: 1;
+}
+.tag {
+  display: inline-block;
+  background: #e4ebe6;
+  color: #155d42;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 22px;
+}
+.danger {
+  color: #a33a2b;
+}
+.section-title {
+  font-size: 36px;
+  font-weight: 650;
+  margin: 32px 0 20px;
+}
