@@ -12,21 +12,26 @@
   "dependencies": {
     "@life-control/contracts": "workspace:*",
     "@tarojs/components": "latest",
+    "@tarojs/helper": "^4.2.1",
     "@tarojs/plugin-framework-react": "latest",
     "@tarojs/react": "latest",
     "@tarojs/runtime": "latest",
+    "@tarojs/shared": "^4.2.1",
     "@tarojs/taro": "latest",
-    "react": "latest",
-    "react-dom": "latest"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@babel/core": "latest",
+    "@babel/core": "^7.29.7",
+    "@babel/preset-react": "^7.29.7",
     "@tarojs/cli": "latest",
+    "@tarojs/plugin-platform-weapp": "^4.2.1",
+    "@tarojs/taro-loader": "^4.2.1",
     "@tarojs/webpack5-runner": "latest",
-    "@types/react": "latest",
+    "@types/react": "^18.3.31",
     "@types/webpack-env": "latest",
     "babel-preset-taro": "latest",
-    "typescript": "latest",
+    "typescript": "6.0.3",
     "vitest": "latest"
   }
 }

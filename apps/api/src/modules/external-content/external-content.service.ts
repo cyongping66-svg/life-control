@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { ContentPlatform, ContentStatus } from '@prisma/client';
 import { PrismaService } from '../../core/prisma.service';
+import { ContentPlatform, ContentStatus } from '../../generated/prisma/client';
 
 @Injectable()
 export class ExternalContentService {

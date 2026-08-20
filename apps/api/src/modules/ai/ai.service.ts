@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { LifeCategory as DbCategory } from '@prisma/client';
 import { PrismaService } from '../../core/prisma.service';
+import { LifeCategory as DbCategory } from '../../generated/prisma/client';
 import { ExternalContentService } from '../external-content/external-content.service';
 import { type LifeCategory, MODEL_PROVIDER, type ModelProvider } from './model-provider';
 

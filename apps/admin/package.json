@@ -13,9 +13,9 @@
   "dependencies": {
     "@life-control/contracts": "workspace:*",
     "@vitejs/plugin-react": "latest",
-    "vite": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "vite": "latest"
   },
   "devDependencies": {
     "@eslint/js": "latest",
@@ -25,7 +25,7 @@
     "eslint-plugin-react-hooks": "latest",
     "eslint-plugin-react-refresh": "latest",
     "globals": "latest",
-    "typescript": "latest",
+    "typescript": "6.0.3",
     "typescript-eslint": "latest",
     "vitest": "latest"
   }

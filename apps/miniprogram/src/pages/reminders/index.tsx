@@ -25,8 +25,11 @@ export default function RemindersPage() {
       if (!templateId) {
         await Taro.showToast({ title: '微信提醒模板尚未配置，将改为应用内提醒', icon: 'none' });
       } else {
-        const result = await Taro.requestSubscribeMessage({ tmplIds: [templateId] });
-        if (result[templateId] === 'accept') channel = 'wechat';
+        const result = await Taro.requestSubscribeMessage({
+          tmplIds: [templateId],
+          entityIds: [],
+        });
+        if ((result as Record<string, string>)[templateId] === 'accept') channel = 'wechat';
       }
     }
     try {

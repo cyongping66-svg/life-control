@@ -13,9 +13,9 @@
     "prisma:seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@life-control/contracts": "workspace:*",
     "@aws-sdk/client-s3": "latest",
     "@aws-sdk/s3-request-presigner": "latest",
+    "@life-control/contracts": "workspace:*",
     "@nestjs/common": "latest",
     "@nestjs/config": "latest",
     "@nestjs/core": "latest",
@@ -23,11 +23,15 @@
     "@nestjs/platform-express": "latest",
     "@nestjs/schedule": "latest",
     "@nestjs/swagger": "latest",
+    "@nestjs/throttler": "^6.5.0",
+    "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "latest",
     "class-transformer": "latest",
     "class-validator": "latest",
+    "dotenv": "^17.4.2",
     "helmet": "latest",
     "joi": "latest",
+    "pg": "^8.23.0",
     "reflect-metadata": "latest",
     "rxjs": "latest"
   },
@@ -37,10 +41,11 @@
     "@nestjs/testing": "latest",
     "@types/express": "latest",
     "@types/node": "latest",
+    "@types/pg": "^8.23.1",
     "eslint": "latest",
     "prisma": "latest",
     "tsx": "latest",
-    "typescript": "latest",
+    "typescript": "6.0.3",
     "typescript-eslint": "latest",
     "vitest": "latest"
   }

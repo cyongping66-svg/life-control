@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { ReminderChannel, ReminderStatus } from '@prisma/client';
 import { PrismaService } from '../../core/prisma.service';
+import { ReminderChannel, ReminderStatus } from '../../generated/prisma/client';
 
 @Injectable()
 export class ReminderDispatchService {

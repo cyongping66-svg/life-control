@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components -- 单文件 MVP 入口，后续组件增多时再拆分 */
 import { StrictMode, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';

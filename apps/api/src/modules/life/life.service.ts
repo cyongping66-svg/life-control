@@ -1,5 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CareerKind, FinanceKind, ProgressStatus, ReminderChannel } from '@prisma/client';
+import {
+  CareerKind,
+  FinanceKind,
+  ProgressStatus,
+  ReminderChannel,
+} from '../../generated/prisma/client';
 import { EncryptionService } from '../../core/encryption.service';
 import { PrismaService } from '../../core/prisma.service';
 

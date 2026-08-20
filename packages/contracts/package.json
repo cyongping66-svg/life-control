@@ -21,6 +21,6 @@
     "zod": "latest"
   },
   "devDependencies": {
-    "typescript": "latest"
+    "typescript": "6.0.3"
   }
 }

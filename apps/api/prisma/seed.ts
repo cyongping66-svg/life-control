@@ -1,6 +1,9 @@
-import { ContentPlatform, PrismaClient, UserRole } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { ContentPlatform, PrismaClient, UserRole } from '../src/generated/prisma/client';
 
-const prisma = new PrismaClient();
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) throw new Error('DATABASE_URL 未配置');
+const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
 
 const officialSources = [
   {
