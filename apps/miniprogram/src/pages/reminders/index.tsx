@@ -1,6 +1,7 @@
 import { Button, Input, Picker, View } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { useState } from 'react';
+import { IS_LOCAL_MODE } from '../../lib/api';
 import { useResource } from '../../lib/use-resource';
 
 type Reminder = {
@@ -48,7 +49,11 @@ export default function RemindersPage() {
     <View className="page">
       <View className="hero">
         <View className="title">别靠记忆硬撑</View>
-        <View className="subtitle">微信提醒每次都需要你的主动授权；未授权时仍可在这里查看。</View>
+        <View className="subtitle">
+          {IS_LOCAL_MODE
+            ? '预览模式会在你下次打开小程序时提示到期事项。'
+            : '微信提醒每次都需要你的主动授权；未授权时仍可在这里查看。'}
+        </View>
       </View>
       <View className="card">
         <Input
@@ -68,9 +73,11 @@ export default function RemindersPage() {
         <Button className="button" onClick={() => submit(false)}>
           创建应用内提醒
         </Button>
-        <Button className="button secondary" onClick={() => submit(true)}>
-          授权并创建微信提醒
-        </Button>
+        {!IS_LOCAL_MODE && (
+          <Button className="button secondary" onClick={() => submit(true)}>
+            授权并创建微信提醒
+          </Button>
+        )}
       </View>
       <View className="section-title">我的提醒</View>
       {items.map((item) => (

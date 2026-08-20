@@ -10,6 +10,7 @@ coverage/
 .DS_Store
 apps/miniprogram/.temp/
 apps/miniprogram/dist/
+apps/miniprogram/project.private.config.json
 apps/api/src/generated/
 uploads/
 data/

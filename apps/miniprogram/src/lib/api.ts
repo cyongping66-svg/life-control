@@ -1,10 +1,13 @@
 import Taro from '@tarojs/taro';
+import { localApiRequest } from './local-api';
 
 const API_BASE = process.env.TARO_APP_API_BASE ?? 'http://localhost:3000/api/v1';
 const TOKEN_KEY = 'life-control-token';
+export const IS_LOCAL_MODE = (process.env.TARO_APP_DATA_MODE ?? 'local') === 'local';
 let loginPromise: Promise<string> | null = null;
 
 export async function login(): Promise<string> {
+  if (IS_LOCAL_MODE) return 'local-preview';
   const existing = Taro.getStorageSync<string>(TOKEN_KEY);
   if (existing) return existing;
   if (loginPromise) return loginPromise;
@@ -36,6 +39,7 @@ export async function apiRequest<T>(
   path: string,
   options: { method?: 'GET' | 'POST' | 'PATCH' | 'DELETE'; data?: unknown } = {},
 ) {
+  if (IS_LOCAL_MODE) return localApiRequest<T>(path, options);
   const token = await login();
   const response = await Taro.request<T>({
     url: `${API_BASE}${path}`,
@@ -68,4 +72,10 @@ async function publicRequest<T>(
 export async function copyExternalLink(url: string) {
   await Taro.setClipboardData({ data: url });
   await Taro.showToast({ title: '链接已复制，请到原平台打开', icon: 'none' });
+}
+
+export async function saveLocalFile(tempFilePath: string) {
+  if (!IS_LOCAL_MODE) return tempFilePath;
+  const result = await Taro.saveFile({ tempFilePath });
+  return result.savedFilePath;
 }

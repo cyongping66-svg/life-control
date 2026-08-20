@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "taro build --type weapp",
+    "configure": "node scripts/configure-appid.mjs",
     "dev": "taro build --type weapp --watch",
     "lint": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run --passWithNoTests",

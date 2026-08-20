@@ -1,7 +1,7 @@
 import { Button, Input, Picker, Textarea, View } from '@tarojs/components';
 import Taro, { useDidShow } from '@tarojs/taro';
 import { useState } from 'react';
-import { apiRequest } from '../../lib/api';
+import { apiRequest, IS_LOCAL_MODE, saveLocalFile } from '../../lib/api';
 import { useResource } from '../../lib/use-resource';
 
 type CareerItem = { id: string; kind: string; title: string; status: string; note: string | null };
@@ -54,6 +54,16 @@ export default function CareerPage() {
           : extension === 'doc'
             ? 'application/msword'
             : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+      if (IS_LOCAL_MODE) {
+        const objectKey = await saveLocalFile(file.path);
+        await apiRequest('/files/resumes', {
+          method: 'POST',
+          data: { name: file.name, objectKey, mimeType, size: file.size },
+        });
+        setResumes(await apiRequest<ResumeFile[]>('/files/resumes'));
+        await Taro.showToast({ title: '简历已保存在本机', icon: 'success' });
+        return;
+      }
       const ticket = await apiRequest<{ objectKey: string; uploadUrl: string }>(
         '/files/upload-url',
         {

@@ -1,7 +1,7 @@
-import { Button, Input, View } from '@tarojs/components';
+import { Button, Image, Input, View } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { useState } from 'react';
-import { apiRequest } from '../../lib/api';
+import { apiRequest, IS_LOCAL_MODE, saveLocalFile } from '../../lib/api';
 import { useResource } from '../../lib/use-resource';
 
 type Contact = {
@@ -10,6 +10,7 @@ type Contact = {
   className: string | null;
   phone: string | null;
   birthday: string | null;
+  photoKey: string | null;
 };
 
 export default function SocialPage() {
@@ -53,6 +54,11 @@ export default function SocialPage() {
         ? 'image/png'
         : 'image/jpeg';
       const filename = file.tempFilePath.split('/').pop() ?? 'contact.jpg';
+      if (IS_LOCAL_MODE) {
+        setPhotoKey(await saveLocalFile(file.tempFilePath));
+        await Taro.showToast({ title: '照片已保存在本机', icon: 'success' });
+        return;
+      }
       const ticket = await apiRequest<{ objectKey: string; uploadUrl: string }>(
         '/files/upload-url',
         {
@@ -84,7 +90,10 @@ export default function SocialPage() {
     <View className="page">
       <View className="hero">
         <View className="title">记住重要的人</View>
-        <View className="subtitle">联系方式会加密保存；录入他人信息前，请先尊重对方意愿。</View>
+        <View className="subtitle">
+          {IS_LOCAL_MODE ? '预览模式下信息只保存在本机；' : '联系方式会加密保存；'}
+          录入他人信息前，请先尊重对方意愿。
+        </View>
       </View>
       <View className="card">
         <Input
@@ -122,6 +131,9 @@ export default function SocialPage() {
       <View className="section-title">联系人</View>
       {items.map((item) => (
         <View className="card" key={item.id}>
+          {IS_LOCAL_MODE && item.photoKey && (
+            <Image className="contact-photo" src={item.photoKey} mode="aspectFill" />
+          )}
           <View className="card-title">{item.name}</View>
           <View className="muted">
             {[item.className, item.birthday && `生日 ${item.birthday}`, item.phone]
