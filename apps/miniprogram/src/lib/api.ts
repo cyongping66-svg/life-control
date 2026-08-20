@@ -77,5 +77,6 @@ export async function copyExternalLink(url: string) {
 export async function saveLocalFile(tempFilePath: string) {
   if (!IS_LOCAL_MODE) return tempFilePath;
   const result = await Taro.saveFile({ tempFilePath });
+  if (!('savedFilePath' in result)) throw new Error('文件保存失败');
   return result.savedFilePath;
 }

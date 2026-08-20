@@ -87,9 +87,12 @@ export async function localApiRequest<T>(
   if (method === 'PATCH' && resource.id) {
     const index = collection.findIndex((item) => item.id === resource.id);
     if (index < 0) throw new Error('记录不存在');
+    const existing = collection[index];
+    if (!existing) throw new Error('记录不存在');
     collection[index] = {
-      ...collection[index],
+      ...existing,
       ...(options.data as object),
+      id: existing.id,
       updatedAt: new Date().toISOString(),
     };
     writeData(data);
